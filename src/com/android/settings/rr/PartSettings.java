@@ -50,6 +50,9 @@ public class PartSettings extends SettingsPreferenceFragment implements
 
     private static final String SMART_PIXELS = "smart_pixels";
     private Preference mSmartPixels;
+    private static final String KEY_PHOTOS_SPOOF = "use_photos_spoof";
+    private static final String SYS_PHOTOS_SPOOF = "persist.sys.pixelprops.gphotos";
+    private SwitchPreference mPhotosSpoof;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,6 +67,9 @@ public class PartSettings extends SettingsPreferenceFragment implements
                 com.android.internal.R.bool.config_supportSmartPixels);
         if (!mSmartPixelsSupported)
             removePreference("smart_pixels");
+        mPhotosSpoof = (SwitchPreference) prefScreen.findPreference(KEY_PHOTOS_SPOOF);
+        mPhotosSpoof.setChecked(SystemProperties.getBoolean(SYS_PHOTOS_SPOOF, true));
+        mPhotosSpoof.setOnPreferenceChangeListener(this)
 
         int anim = Settings.System.getInt(getActivity().getContentResolver(),
                 Settings.System.RR_CONFIG_ANIM, 0);
@@ -86,7 +92,16 @@ public class PartSettings extends SettingsPreferenceFragment implements
      }
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
+	if (preference == mPhotosSpoof) {
+            boolean value = (Boolean) newValue;
+            SystemProperties.set(SYS_PHOTOS_SPOOF, value ? "true" : "false");
+            return true;
+	}
         return false;
+    }
+
+    public static void reset(Context mContext) {
+        SystemProperties.set(SYS_PHOTOS_SPOOF, "true");
     }
 
     @Override

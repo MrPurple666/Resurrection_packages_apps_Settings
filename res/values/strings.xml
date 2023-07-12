@@ -11465,4 +11465,7 @@
 
     <string name="force_disable_supl_title">Force disable Secure User Plane Location (SUPL)</string>
     <string name="force_disable_supl_summary">Always disable SUPL assisted location support regardless of carrier configuration (does not disable control plane A-GNSS and DivestOS does not send IMSI to the SUPL)</string>
+    <!-- Unlimited google photos storage -->
+    <string name="use_photos_spoof_title">Unlimited Photos storage</string>
+    <string name="use_photos_spoof_summary">Spoof your device as Pixel XL for Google Photos app only to provide unlimited storage for backup</string>
 </resources>
