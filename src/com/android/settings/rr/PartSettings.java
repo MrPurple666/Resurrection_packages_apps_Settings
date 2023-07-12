@@ -53,6 +53,9 @@ public class PartSettings extends SettingsPreferenceFragment implements
     private static final String KEY_PHOTOS_SPOOF = "use_photos_spoof";
     private static final String SYS_PHOTOS_SPOOF = "persist.sys.pixelprops.gphotos";
     private SwitchPreference mPhotosSpoof;
+    private static final String KEY_GAMES_SPOOF = "use_games_spoof";
+    private static final String SYS_GAMES_SPOOF = "persist.sys.pixelprops.games";
+    private SwitchPreference mGamesSpoof;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,9 +70,13 @@ public class PartSettings extends SettingsPreferenceFragment implements
                 com.android.internal.R.bool.config_supportSmartPixels);
         if (!mSmartPixelsSupported)
             removePreference("smart_pixels");
+        mGamesSpoof = (SwitchPreference) prefScreen.findPreference(KEY_GAMES_SPOOF);
+        mGamesSpoof.setChecked(SystemProperties.getBoolean(SYS_GAMES_SPOOF, false));
+        mGamesSpoof.setOnPreferenceChangeListener(this);
+
         mPhotosSpoof = (SwitchPreference) prefScreen.findPreference(KEY_PHOTOS_SPOOF);
         mPhotosSpoof.setChecked(SystemProperties.getBoolean(SYS_PHOTOS_SPOOF, true));
-        mPhotosSpoof.setOnPreferenceChangeListener(this)
+        mPhotosSpoof.setOnPreferenceChangeListener(this);
 
         int anim = Settings.System.getInt(getActivity().getContentResolver(),
                 Settings.System.RR_CONFIG_ANIM, 0);
@@ -92,15 +99,21 @@ public class PartSettings extends SettingsPreferenceFragment implements
      }
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
+        final ContentResolver resolver = getActivity().getContentResolver();
 	if (preference == mPhotosSpoof) {
             boolean value = (Boolean) newValue;
             SystemProperties.set(SYS_PHOTOS_SPOOF, value ? "true" : "false");
+            return true;
+	 } else if (preference == mGamesSpoof) {
+            boolean value = (Boolean) newValue;
+            SystemProperties.set(SYS_GAMES_SPOOF, value ? "true" : "false");
             return true;
 	}
         return false;
     }
 
     public static void reset(Context mContext) {
+        SystemProperties.set(SYS_GAMES_SPOOF, "false");
         SystemProperties.set(SYS_PHOTOS_SPOOF, "true");
     }
 

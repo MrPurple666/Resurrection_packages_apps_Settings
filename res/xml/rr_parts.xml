@@ -110,6 +110,11 @@
         android:title="@string/use_photos_spoof_title"
         android:summary="@string/use_photos_spoof_summary"
         android:defaultValue="true" />
+        <!-- Unlock FPS for specific games -->
+    <com.android.settings.rr.Preferences.SystemSettingSwitchPreference
+        android:key="use_games_spoof"
+        android:title="@string/use_games_spoof_title"
+        android:summary="@string/use_games_spoof_summary" />
  </PreferenceCategory>
 </PreferenceScreen>
 
