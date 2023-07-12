@@ -56,6 +56,9 @@ public class PartSettings extends SettingsPreferenceFragment implements
     private static final String KEY_GAMES_SPOOF = "use_games_spoof";
     private static final String SYS_GAMES_SPOOF = "persist.sys.pixelprops.games";
     private SwitchPreference mGamesSpoof;
+    private static final String KEY_STREAM_SPOOF = "use_stream_spoof";
+    private static final String SYS_STREAM_SPOOF = "persist.sys.pixelprops.streaming";
+    private SwitchPreference mStreamSpoof;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,6 +80,10 @@ public class PartSettings extends SettingsPreferenceFragment implements
         mPhotosSpoof = (SwitchPreference) prefScreen.findPreference(KEY_PHOTOS_SPOOF);
         mPhotosSpoof.setChecked(SystemProperties.getBoolean(SYS_PHOTOS_SPOOF, true));
         mPhotosSpoof.setOnPreferenceChangeListener(this);
+
+        mStreamSpoof = (SwitchPreference) findPreference(KEY_STREAM_SPOOF);
+        mStreamSpoof.setChecked(SystemProperties.getBoolean(SYS_STREAM_SPOOF, true));
+        mStreamSpoof.setOnPreferenceChangeListener(this);
 
         int anim = Settings.System.getInt(getActivity().getContentResolver(),
                 Settings.System.RR_CONFIG_ANIM, 0);
@@ -108,6 +115,10 @@ public class PartSettings extends SettingsPreferenceFragment implements
             boolean value = (Boolean) newValue;
             SystemProperties.set(SYS_GAMES_SPOOF, value ? "true" : "false");
             return true;
+        } else if (preference == mStreamSpoof) {
+            boolean value = (Boolean) newValue;
+            SystemProperties.set(SYS_STREAM_SPOOF, value ? "true" : "false");
+            return true;
 	}
         return false;
     }
@@ -115,6 +126,7 @@ public class PartSettings extends SettingsPreferenceFragment implements
     public static void reset(Context mContext) {
         SystemProperties.set(SYS_GAMES_SPOOF, "false");
         SystemProperties.set(SYS_PHOTOS_SPOOF, "true");
+        SystemProperties.set(SYS_STREAM_SPOOF, "true");
     }
 
     @Override
